@@ -4,8 +4,9 @@ import { CommodityService } from './commodity.service';
 import { RbacInterceptor } from '../../interceptor/rbac.interceptor';
 import { RbacGuard } from '../../guards/rbac.guard';
 import { roleConstans as role } from '../auth/constants';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('commodity')
 @Controller('commodity')
 export class CommodityController {
