@@ -3,8 +3,8 @@ const productConfig = {
   mysql: {
     port: 3306,
     host: 'localhost',
-    user: 'game',
-    password: 'NWrkGTp7ZWLCGCcZ',
+    user: 'huanyu',
+    password: '5i3rp6jHASkZ5WRZ',
     database: 'nest_zero_to_one', // 库名
     connectionLimit: 10, // 连接限制
   },
