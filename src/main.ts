@@ -24,7 +24,6 @@ async function bootstrap() {
     .setTitle('Nest zero to one')
     .setDescription('The nest-zero-to-one API description')
     .setVersion('1.0')
-    .addTag('test')
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-doc', app, document);

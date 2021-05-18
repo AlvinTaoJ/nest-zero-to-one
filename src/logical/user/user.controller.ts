@@ -36,7 +36,6 @@ export class UserController {
     }
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe())
   @Post('register')
   async register(@Body() body: RegisterInfoDTO) {

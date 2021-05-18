@@ -41,7 +41,7 @@ export class UserService {
    * @param requestBody 请求体
    */
   async register(requestBody: any): Promise<any> {
-    const { accountName, realName, password, repassword, mobile } = requestBody;
+    const { accountName, realName, password, repassword, mobile, role } = requestBody;
     if (password !== repassword) {
       return {
         code: 400,
@@ -58,11 +58,12 @@ export class UserService {
     }
     const salt = makeSalt(); // 制作密码盐
     const hashPwd = encryptPassword(password, salt); // 加密密码
+    let parsedRole = parseInt(role);
     const registerSQL = `
       INSERT INTO admin_user
         (account_name, real_name, passwd, passwd_salt, mobile, user_status, role, create_by)
       VALUES
-        ('${accountName}', '${realName}', '${hashPwd}', '${salt}', '${mobile}', 1, 3, 0)
+        ('${accountName}', '${realName}', '${hashPwd}', '${salt}', '${mobile}', 1, '${parsedRole}', 0)
     `;
     try {
       await sequelize.query(registerSQL, { logging: false });
