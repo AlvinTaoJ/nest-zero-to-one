@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../user/user.service';
+import { PlayerService } from '../player/player.service';
 import { JwtService } from '@nestjs/jwt';
 import { encryptPassword } from '../../utils/cryptogram';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UserService,
+    private readonly playerService: PlayerService,
     private readonly jwtService: JwtService,
   ) {}
 
   // JWT验证 - Step 2: 校验用户信息
   async validateUser(username: string, password: string): Promise<any> {
     // console.log('JWT验证 - Step 2: 校验用户信息');
-    const user = await this.usersService.findOne(username);
+    const user = await this.playerService.findOne(username);
     if (user) {
       const hashedPassword = user.password;
       const salt = user.salt;
@@ -43,9 +43,7 @@ export class AuthService {
   async certificate(user: any) {
     const payload = {
       username: user.username,
-      sub: user.id,
-      realName: user.realName,
-      role: user.role,
+      sub: user.id
     };
     // console.log('JWT验证 - Step 3: 处理 jwt 签证', `payload: ${JSON.stringify(payload)}`);
     try {
@@ -54,6 +52,7 @@ export class AuthService {
         code: 200,
         data: {
           token,
+          ...user
         },
         msg: `登录成功`,
       };

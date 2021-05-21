@@ -11,6 +11,7 @@ export class RbacGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
+    console.log(request)
     if (user.role > this.role) {
       throw new ForbiddenException('对不起，您无权操作');
     }
