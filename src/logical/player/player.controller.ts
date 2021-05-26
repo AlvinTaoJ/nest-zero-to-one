@@ -1,9 +1,10 @@
-import { Controller, Post, Body, UsePipes } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from '../auth/auth.service';
 import { PlayerService } from './player.service';
 import { ValidationPipe } from '../../pipe/validation.pipe';
 import { LoginDTO, RegisterInfoDTO } from './player.dto';
 import { ApiTags, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { LoginGuard } from '../auth/login.guard';
 
 @ApiBearerAuth()
 @ApiTags('player')
@@ -36,9 +37,26 @@ export class PlayerController {
     }
   }
 
+  @UseGuards(new LoginGuard())
+  @Post('isLogin')
+  async isLogin(@Request() req) {
+    return {
+      code: 200,
+      data: req.user
+    } 
+  }
+
   @UsePipes(new ValidationPipe())
   @Post('register')
   async register(@Body() body: RegisterInfoDTO) {
-    return await this.playerService.register(body);
+    const result = await this.playerService.register(body); 
+    if (result.code === 200) {
+      // 注册成功，自动登录
+      const authResult = await this.authService.validateUser(body.username, body.password);
+      return this.authService.certificate(authResult.user);
+    } else {
+      // 注册失败，返回失败结果
+      return result
+    }
   }
 }

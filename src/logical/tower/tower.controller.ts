@@ -28,6 +28,6 @@ export class TowerController {
     type: RecordDTO,
   })
   async createRecord(@Body() Body, @Request() req): Promise<object[]> {
-    return this.towerService.createRecord(Body, req.user.userId);
+    return this.towerService.createRecord(Body, req.user);
   }
 }

@@ -49,7 +49,7 @@ export class TowerService {
     const currentIndex = (pageIndex - 1) * pageSize < 0 ? 0 : (pageIndex - 1) * pageSize;
     const queryRecordListSQL = `
       SELECT
-        id, user_id userId, score, floor,
+        id, user_id userId, username, score, floor,
         DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') createTime,
         DATE_FORMAT(update_time, '%Y-%m-%d %H:%i:%s') updateTime
       FROM
@@ -96,10 +96,10 @@ export class TowerService {
    * @returns {Promise<any>}
    * @memberof TowerService
    */
-   async createRecord(body: any, userId: string): Promise<any> {
+   async createRecord(body: any, user: any): Promise<any> {
     const { score, floor } = body;
     // 先查询是否已有记录
-    const record = await this.findOne(userId);
+    const record = await this.findOne(user.userId);
     let sql;
     if (record) {
       // 已经有记录, 做更新
@@ -116,9 +116,9 @@ export class TowerService {
       // 没有记录，创建
       sql = `
         INSERT INTO tower_user_record
-          (user_id, score, floor)
+          (user_id, username, score, floor)
         VALUES
-          ('${userId}', '${score}', '${floor}');
+          ('${user.userId}', '${user.username}', '${score}', '${floor}');
       `;
     }
     await sequelize.query(sql, { logging: false });
