@@ -103,6 +103,13 @@ export class TowerService {
     let sql;
     if (record) {
       // 已经有记录, 做更新
+      // 新记录的分数高于原记录，则更新
+      if (record.score > score) {
+        return {
+          code: 200,
+          msg: 'Success',
+        }
+      }
       sql = `
         UPDATE
         tower_user_record
